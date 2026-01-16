@@ -9,11 +9,13 @@ plugin-install () {
         > "$NGINX_STREAM_SUDOERS_FILE"
     local NGINX_CONF="/etc/nginx/nginx.conf"
     mkdir -p "/etc/nginx/app-stream"
-    cat >> $NGINX_CONF << EOF
+    if ! grep -q "include /etc/nginx/app-stream/\*.conf" "$NGINX_CONF"; then
+        cat >> $NGINX_CONF << EOF
 stream {
     include /etc/nginx/app-stream/*.conf;
 }
 EOF
+    fi
 }
 
 plugin-install "$@"
